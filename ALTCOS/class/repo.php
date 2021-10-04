@@ -425,17 +425,22 @@ class repo {
   /*
    * Сравнить список RPM-файлов различный версий
    */
-  function cmpRPMs($version1, $version2) {
-    $version1Dir = repos::versionVarSubDir($version1);
-    $version2Dir = repos::versionVarSubDir($version2);
+  function cmpRPMs($toVersion, $fromVersion, $fromRef=false) {
+    $toVersionDir = repos::versionVarSubDir($toVersion);
+    $fromVersionDir = repos::versionVarSubDir($fromVersion);
 
-    $path1 = $this->varsDir . "/$version1Dir/var/lib/rpm/";
+    $path1 = $this->varsDir . "/$toVersionDir/var/lib/rpm/";
     $rpmListFile1 = tempnam('/tmp', 'ostree_');
     $cmd = "rpm -qa --dbpath=$path1 | sort > $rpmListFile1";
 //     echo "<pre>CMD1=$cmd</pre>\n";
     exec($cmd);
-
-    $path2 = $this->varsDir . "/$version2Dir/var/lib/rpm/";
+    if ($fromRef) {
+      $fromRefDir = $_SERVER['DOCUMENT_ROOT'] . "/ALTCOS/streams/" . repos::refToDir($fromRef);
+      $fromVarsDir = "$fromRefDir/vars";
+      $path2 = "$fromVarsDir/$fromVersionDir/var/lib/rpm/";
+    } else {
+      $path2 = $this->varsDir . "/$fromVersionDir/var/lib/rpm/";
+    }
     $rpmListFile2 = tempnam('/tmp', 'ostree_');
     $cmd = "rpm -qa --dbpath=$path2 | sort > $rpmListFile2";
 //     echo "<pre>CMD2=$cmd</pre>\n";
