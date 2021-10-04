@@ -18,7 +18,7 @@ $refDir = repos::refRepoDir($ref);
 $subRef = repos::subRef($ref, $subName);
 $subVersion = repos::refVersion($subRef);
 // $subVersionVarSubDir = repos::versionVarSubDir($subVersion);
-$log = new log('update');
+$log = new log('install');
 
 $repoType = 'bare';
 $repo = new repo($ref, $repoType);

@@ -124,12 +124,22 @@ if ($Arch) {
 if (!$Ref) exit(0);
 if (!$refExists && strlen($Ref) > 0) {
   echo "<div class='warning'>Запрошенная ветка '$Ref' отсутствует в bare-репозитории</div>";
+  $refLevel = count(explode('/', $Ref));
+//   echo "<pre>REF=$Ref REFLEVEL=$refLevel</pre>";
+  if ($refLevel > 3) {
+?>
+<div class='warning'>
+Выберите другую ветку
+</div>
+<?php
+  } else {
 ?>
 <form action='ostree/createRef/' target='ostreeREST'>
 <input name='ref' value='<?= $Ref?>' type='hidden' />
 <button type='submit' class='create'>Создать ветку <?= $Ref?></button>
 </form>
 <?php
+  }
   exit(0);
 }
 ?>
@@ -153,7 +163,7 @@ function markAfter(input) {
 if (count($refs) > 0) {
 ?>
 <p>
-<!--form action='ostree/install/' target='ostreeREST'>
+<form action='ostree/install/' target='ostreeREST'>
 <input type='hidden' name='ref' value='<?= $Ref?>' />
 <div class='addSubtef'>
 Добавить подветку:
@@ -164,7 +174,7 @@ if (count($refs) > 0) {
 <br />
 <button type='submit'>Добавить</button>
 </div>
-</form-->
+</form>
 <?php
   if (count($altcosSubRefs) > 0) {
 ?>
